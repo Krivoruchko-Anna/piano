@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const pianoKeys = document.querySelectorAll('.piano-key');
     const btnNotes = document.querySelector('.btn-notes');
     const btnLetters = document.querySelector('.btn-letters');
+    const btnFullScreen = document.querySelector('.openfullscreen');
 
     pianoKeys.forEach(key => key.addEventListener('transitionend', removeTransition));
 
@@ -24,8 +25,12 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    function playByClick(e) {
+    let isMouseDown = false;
+    function playByMouse(e) {
         if (e.target.classList.contains('piano-key')) {
+            if (e.type === 'mousedown') isMouseDown = true;
+            if (!isMouseDown) return;
+
             removeActiveClass();
             e.target.classList.add('piano-key-active');
             const note = e.target.dataset.note;
@@ -60,9 +65,16 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    function toggleFullScreen() {
+        !document.fullscreenElement ? document.documentElement.requestFullscreen() :  document.exitFullscreen();
+    }
+
+    document.addEventListener('mouseup', () => isMouseDown = false);
+    btnFullScreen.addEventListener('click', toggleFullScreen);
     btnLetters.addEventListener('click', showLetters);
     btnNotes.addEventListener('click', showNotes);
-    piano.addEventListener('click', playByClick);
+    piano.addEventListener('mousedown', playByMouse);
+    piano.addEventListener('mouseover', playByMouse);
     window.addEventListener('keydown', playByKey);
 });
 
