@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function playByKey(e) {
-        const letter = e.key.toUpperCase();
+        const letter = e.code.slice(-1);
         const audio = document.querySelector(`audio[data-letter="${letter}"]`);
         const key = document.querySelector(`div[data-letter="${letter}"]`)
         if (!audio) return;
